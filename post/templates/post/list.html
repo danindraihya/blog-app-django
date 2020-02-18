@@ -1,15 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>List</h1>
-    {% for post in list_post %}
-      <p>{{post.title}}</p>
-      <p>{{post.content}}</p>
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="col-9">
+  <div class="row">
+  {% for post in list_post %}
+    <div class="card m-2" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">{{post.title}}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{post.created_at}}</h6>
+        <p class="card-text">{{post.content}}</p>
+        <a href="#" class="card-link">Detail</a>
+      </div>
+    </div>
     {% endfor %}
-</body>
-</html>
+  </div>
+</div>
+  
+{% endblock content %}
+  
