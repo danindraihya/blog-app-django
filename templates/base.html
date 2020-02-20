@@ -20,11 +20,28 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div class="navbar-nav">
-                <a class="nav-item nav-link" href="#">Home</a>
+                <a class="nav-item nav-link" href="{% url 'post:list' %}">Home</a>
                 <a class="nav-item nav-link" href="#">Features</a>
                 <a class="nav-item nav-link" href="#">Pricing</a>
-                <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
               </div>
+              
+              {% if user.is_authenticated %}
+                <div class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{user}}
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="{% url 'post:create' %}">Create Post</a>
+                    <a class="dropdown-item" href="#">Manage Post</a>
+                    <a class="dropdown-item" href="{% url 'user:logout' %}">Logout</a>
+                  </div>
+                </div>
+              {% else %}
+                <div class="navbar-nav">
+                  <a class="nav-item nav-link" href="{% url 'user:login' %}">Login</a>
+                </div>
+              {% endif %}
+                
             </div>
         </div>
       </nav>
@@ -37,6 +54,6 @@
 
       <script src="{% static 'vendor/jquery.min.js' %}"></script>
       <script src="{% static 'vendor/popper.min.js' %}"></script>
-      <script src="{% static 'vendor/js/bootsrap.min.js' %}"></script>
+      <script src="{% static 'vendor/js/bootstrap.min.js' %}"></script>
 </body>
 </html>

@@ -1,8 +1,16 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-    {{object.title}}
-    {{object.content}}
+    <h1>{{object.title}}</h1>
+    <p style="font-size: 12px;">{{object.created_at}}</p>
+    <p>{{object.content}}</p>
+    <div class="row">
+        <div class="col-6">
+            <a href="{% url 'post:update' object.pk %}" class="btn btn-warning">Update</a>
+        </div>
+        <div class="col-6">
+            <a href="{% url 'post:delete' object.pk %}" class="btn btn-danger">Delete</a>
+        </div>
+    </div>
 {% endblock content %}
     
