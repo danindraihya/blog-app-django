@@ -3,8 +3,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import CreateView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
-from .forms import UserRegisterForm
-from django.contrib.auth.views import LoginView, LogoutView
+from .forms import UserRegisterForm, UserForm, ProfileForm
+from django.contrib.auth.views import LoginView, LogoutView, TemplateView
+
 
 class UserRegisterView(CreateView):
     model      = User
@@ -17,3 +18,36 @@ class UserLoginView(LoginView):
 
 class UserLogoutView(LogoutView):
     template_name   = 'user/logout.html'
+
+class UserProfileView(TemplateView):
+    user_form_class     = UserForm
+    profile_form_class  = ProfileForm 
+    template_name       = 'user/profile.html'
+
+    def post(self, request):
+        user_form       = self.user_form_class(request.POST, instance=request.user)
+        profile_form    = self.profile_form_class(request.POST, instance=request.user.profile)
+
+        context         = self.get_context_data(
+            user_form=user_form,
+            profile_form=profile_form
+        )
+
+        if user_form.is_valid():
+            self.form_save(user_form)
+        if profile_form.is_valid():
+            self.form_save(profile_form)
+
+        return self.render_to_response(context)
+
+    def form_save(self, form):
+        obj = form.save()
+        return obj
+
+    def get(self, request, *args, **kwargs):
+        user_form = self.user_form_class(instance=request.user)
+        profile_form = self.profile_form_class(instance=request.user.profile)
+
+        context = self.get_context_data(user_form=user_form,profile_form=profile_form)
+
+        return self.render_to_response(context)
