@@ -10,6 +10,7 @@ from django.views.generic import (
 from .models import Posts
 from django.urls import reverse_lazy
 from .forms import PostForm
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 class ListPostsView(ListView):
     model         = Posts
@@ -21,7 +22,7 @@ class DeletePostsView(DeleteView):
     template_name   = 'post/delete_confirmation.html'
     success_url     = reverse_lazy('post:list')
 
-class CreatePostsView(CreateView):
+class CreatePostsView(LoginRequiredMixin, CreateView):
     form_class      = PostForm
     template_name   = 'post/create.html'
 

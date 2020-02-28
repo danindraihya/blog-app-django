@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from .forms import UserRegisterForm, UserForm, ProfileForm
 from django.contrib.auth.views import LoginView, LogoutView, TemplateView
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class UserRegisterView(CreateView):
     model      = User
@@ -19,14 +19,16 @@ class UserLoginView(LoginView):
 class UserLogoutView(LogoutView):
     template_name   = 'user/logout.html'
 
-class UserProfileView(TemplateView):
+class UserProfileView(LoginRequiredMixin, TemplateView):
+    # login_url           = reverse_lazy('user:login')
+    # redirect_field_name = reverse_lazy('user:profile')
     user_form_class     = UserForm
     profile_form_class  = ProfileForm 
     template_name       = 'user/profile.html'
 
     def post(self, request):
         user_form       = self.user_form_class(request.POST, instance=request.user)
-        profile_form    = self.profile_form_class(request.POST, instance=request.user.profile)
+        profile_form    = self.profile_form_class(request.POST, request.FILES, instance=request.user.profile)
 
         context         = self.get_context_data(
             user_form=user_form,
